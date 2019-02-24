@@ -4,6 +4,7 @@
 const video = document.querySelector('video');
 const canvas = window.canvas = document.querySelector('canvas');
 const form = document.querySelector('form');
+let messageCounter = 0;
 canvas.width = 480;
 canvas.height = 360;
 
@@ -37,8 +38,18 @@ form.addEventListener('submit', function(e){
 })
 
 socket.on('chat message', function(obj){
+  var showPic = false;
+  if(messageCounter > 5) {
+    showPic = Boolean(Math.round(Math.random()));
+  }
+
   var el =  document.createElement("li");
-  el.innerHTML = '<img style="width:100px;height:75px" src="'+obj.snapshot+'"> ' + obj.msg;
-  document.getElementById('messages').appendChild(el)
+  if(showPic) {
+      el.innerHTML = '<img style="width:100px;height:75px" src="'+obj.snapshot+'"> ' + obj.msg;
+  } else {
+    el.innerHTML = obj.msg;
+  }
+  document.getElementById('messages').appendChild(el);
+  messageCounter++;
   window.scrollTo(0, document.body.scrollHeight);
 });
